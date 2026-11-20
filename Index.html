@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教學原理 - 三人組第十組（糖尿病教育）</title>
+    <style>
+        :root {
+            --primary: #2D5A27;
+            --secondary: #54A73A;
+            --accent: #E88D2B;
+            --light-bg: #F5F0E8;
+            --white: #FFFFFF;
+            --dark-text: #333333;
+            --mild-text: #666666;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 'Arial', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 階層導航 */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--white);
+            padding: 0.8rem 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-bar h1 {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .nav-indicators {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-indicators div {
+            width: 0.8rem;
+            height: 0.8rem;
+            background: #ddd;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .nav-indicators div.active {
+            background: var(--primary);
+        }
+
+        /* 投影片容器 */
+        .slide {
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            display: none;
+        }
+
+        .slide.active {
+            display: block;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 標題區塊 */
+        .slide h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--secondary);
+            display: inline-block;
+            width: 100%;
+        }
+
+        .slide h3 {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            margin: 1.5rem 0 0.8rem;
+        }
+
+        /* 文字內容 */
+        .slide p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        .slide ul {
+            margin: 0.5rem 0 0.5rem 1.5rem;
+        }
+
+        .slide li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* 特殊樣式 */
+        .bullet-list {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .key-info {
+            background: #E8F5E9;
+            padding: 0.8rem;
+            border-radius: 6px;
+            margin: 0.8rem 0;
+            font-size: 0.95rem;
+        }
+
+        .medication-item {
+            margin: 0.8rem 0;
+            padding: 0.6rem;
+            background: var(--white);
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+
+        .medication-item h4 {
+            color: var(--primary);
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        /* 目錄按鈕 */
+        .toc-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            z-index: 90;
+            transition: transform 0.2s;
+        }
+
+        .toc-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* 導航按鈕 */
+        .nav-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: var(--secondary);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            z-index: 90;
+            display: none;
+        }
+
+        .nav-btn:hover {
+            background: #4CAF50;
+        }
+
+        /* 響應式調整 */
+        @media (max-width: 480px) {
+            .nav-btn, .toc-btn {
+                display: block;
+            }
+            .slide {
+                padding: 1rem;
+            }
+            .slide h2 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 頂部導航列 -->
+    <div class="nav-bar">
+        <h1>教學原理 - 三人組第十組</h1>
+        <div class="nav-indicators" id="navIndicators">
+            <!-- 由 JavaScript 填入 -->
+        </div>
+    </div>
+
+    <!-- 投影片內容 -->
+    <div class="slide active" id="slide1">
+        <h2>糖尿病自我照護</h2>
+        <p><strong>組別：</strong>第十組</p>
+        <p><strong>組員：</strong>11520095曾雅瑄、11520405沈珮芯、11520413潘怡安</p>
+        <p><strong>指導老師：</strong>莊麗玉老師</p>
+    </div>
+
+    <div class="slide" id="slide2">
+        <h2>目錄</h2>
+        <div class="bullet-list">
+            <strong>1. 認識糖尿病</strong><br>
+            ‧ 症狀：突然吃很多、容易口渴、尿多、體重明顯變輕<br>
+            ‛ 診斷標準：HBA1C≥6.5%、空腹血糖≥126 MG/DL、OGTT 2小時≥200 MG/DL、典型高血糖症狀+隨機血糖≥200 MG/DL<br>
+            ‧ 併發症：大血管病變（腦中風、心肌梗塞、糖尿病足）、小血管病變（視網膜病變、腎臟病變、神經病變）
+        </div>
+    </div>
+
+    <div class="slide" id="slide3">
+        <h2>1. 認識糖尿病</h2>
+        <p>糖尿病可分為第1型糖尿病、第2型糖尿病、其他型糖尿病、妊娠型糖尿病等。</p>
+        <p>診斷標準包括以下4項，非懷孕狀況下只要符合其中1項即可診斷為糖尿病(前三項需重複驗證2次以上)</p>
+        <ul>
+            <li>(一) 糖化血色素(HBA1C)≧6.5%</li>
+            <li>(二) 空腹血漿血糖≧126 MG/DL</li>
+            <li>(三) 口服葡萄糖耐受試驗第2小時血漿血糖≧200 MG/DL</li>
+            <li>(四) 典型的高血糖症狀(多吃、多喝、多尿與體重減輕)且隨機血漿血糖≧200 MG/DL</li>
+        </ul>
+    </div>
+
+    <div class="slide" id="slide4">
+        <h2>2. 血糖控制</h2>
+        <div class="key-info">
+            <strong>成人目標：</strong>HBA1C<7%<br>
+            <strong>65歲以上長者：</strong>HBA1C<7.5%<br>
+            <strong>健康中等或差者：</strong>HBA1C<8.0～8.5%
+        </div>
+        <p>盡早戒菸：抽菹會增加血管病變和死亡率。</p>
+        <p>每日檢查皮膚：若有厚繭、灰指甲、雞眼，請就醫求助，勿自行修剪及塗抹藥膏。</p>
+    </div>
+
+    <div class="slide" id="slide5">
+        <h2>3. 飲食管理</h2>
+        <div class="bullet-list">
+            <strong>醣類選擇：</strong>低升糖指數和膳食纖維含量高的食物，包括：全穀類、蔬菜類、水果類等，平均分配於三餐中<br>
+            <strong>限制攝取：</strong>膽固醇和反式脂肪，例如：肥肉、蛋黃、全脂奶製品、加工食物或烘培食物等<br>
+            <strong>蛋白質：</strong>每日可到4-6份，應選用高生物價的蛋白質食物，例如：蛋、瘦肉、魚，避免食用加工肉品及湯汁的攝取
+        </div>
+    </div>
+
+    <div class="slide" id="slide6">
+        <h2>4. 運動</h2>
+        <div class="key-info">
+            <strong>建議：</strong>每週至少150分鐘的中高強度有氧運動<br>
+            <strong>頻率：</strong>每週至少運動三天，開始可先進行10分鐘有氧運動，目標為每天或每週大部分天數活動至少30分鐘以上
+        </div>
+        <ul>
+            <li>可建議：快走、慢跑、游泳、有氧舞蹈、球類運動等</li>
+        </ul>
+    </div>
+
+    <div class="slide" id="slide7">
+        <h2>5. 藥物治療</h2>
+        
+        <div class="medication-item">
+            <h4>1. 雙胍類 (Biguanides) - Loditon(伏糖)</h4>
+            <p>減少肝臟製造葡萄糖、抑制小腸吸收葡萄糖、增加胰島素敏感性</p>
+            <p><strong>副作用：</strong>腸胃不適、食慾降低、疲勞、金屬味覺、體重減輕、乳酸中毒</p>
+        </div>
+
+        <div class="medication-item">
+            <h4>2. 磺醯尿素類 (SULFONYLUREA) - GLIBEN(固利康)、GLUSAFE(醣安)、GELID(格利糖)</h4>
+            <p>刺激胰臟分泌胰島素</p>
+            <p><strong>副作用：</strong>低血糖(頭暈、心悸、冒冷汗、暈倒)、體重增加</p>
+        </div>
+
+        <div class="medication-item">
+            <h4>3. SGLT2抑制劑 - FORXIGA(福適佳)、JARDIANCE(恩排糖)</h4>
+            <p>抑制鈉-葡萄糖共同運輸蛋白，使腎臟無法回收葡萄糖，讓葡萄糖從尿液中排出</p>
+            <p><strong>副作用：</strong>泌尿道感染、利尿、脫水、低血壓、血脂異常、低血糖</p>
+        </div>
+
+        <div class="medication-item">
+            <h4>4. DPP-4抑制劑 - TRAJENTA(糖漸平)、JANUVIA(佳醣維)</h4>
+            <p>抑制DPP-4，使體內腸泌素濃度增加，促進胰島素分泌，抑制升糖素分泌</p>
+            <p><strong>副作用：</strong>腹痛、噁心、腹瀉、鼻咽炎、頭痛、關節痛</p>
+        </div>
+    </div>
+
+    <div class="slide" id="slide8">
+        <h2>6. 日常照護</h2>
+        <ol>
+            <li><strong>每日檢查雙腳：</strong>用37～40度的熱水和中性肥皂清潔，不可使用毛刷刷腳，以免皮膚損傷</li>
+            <li><strong>潤滑足部：</strong>足部清潔且擦乾後，使用不含酒精的乳液，保持通風、乾燥，避免使用凡士林</li>
+            <li><strong>修剪指甲：</strong>(1)視力不佳請親友或美甲師協助；(2)趾甲邊緣剪平，不要剪太短</li>
+            <li><strong>選擇襪子：</strong>選擇吸汗、淺色的棉質襪，勿太緊或太鬆</li>
+            <li><strong>適腳鞋子：</strong>(1)室內也要穿拖鞋；(2)外出穿全包式、低跟、合腳鞋子；(3)購買鞋宜在下午(下肢水腫，尺碼會比上午稍大)</li>
+            <li><strong>避免加熱產品：</strong>末梢感覺差，對溫度感受遲鈍，如加溫毯、熱水袋以免燙傷</li>
+            <li><strong>勿翹二郎腿：</strong>以免影響下肢血循，同時引腰酸背痛</li>
+        </ol>
+    </div>
+
+    <div class="slide" id="slide9">
+        <h2>7. Q&A (常見問答)</h2>
+        
+        <div class="bullet-list">
+            <strong>Q:</strong> 有哪些運動適合糖尿病患者？<br>
+            <strong>A:</strong> 快走、慢跑、游泳、有氧舞蹈及球類運動<br><br>
+            <strong>Q:</strong> 每週應該運動多久？<br>
+            <strong>A:</strong> 150分鐘<br><br>
+            <strong>Q:</strong> 糖尿病患者如何選擇襪子和鞋子？<br>
+            <strong>A:</strong> 選擇吸汗棉襪及合腳、低跟、全包式的鞋子，預防足部受傷<br><br>
+            <strong>Q:</strong> 糖尿病的診斷標準？<br>
+            <strong>A:</strong> HBA1C≥6.5%、空腹血糖≥126或血糖≥200 MG/DL(隨機)
+        </div>
+    </div>
+
+    <div class="slide" id="slide10">
+        <h2>結語</h2>
+        <p>感謝聆聽</p>
+        <p>認識糖尿病，從自我照護開始</p>
+    </div>
+
+    <!-- 導航按鈕 -->
+    <button class="nav-btn" id="prevBtn">上一頁</button>
+    <button class="nav-btn" id="nextBtn">下一頁</button>
+    <button class="toc-btn" id="tocBtn">目錄</button>
+
+    <script>
+        // 投影片資料 - 對應33頁的簡化版
+        const slides = [
+            {            title: "糖尿病自我照護",
+                content: "組別：第十組；組員：11520095曾雅瑄、11520405沈珮芯、11520413潘怡安；指導老師：莊麗玉老師"
+            },
+            {                title: "目錄",
+                content: "1. 認識糖尿病<br>2. 血糖控制<br>3. 飲食管理<br>4. 運動<br>5. 藥物治療<br>6. 日常照護<br>7. Q/A<br>8. 結語"
+            },
+            {                title: "認識糖尿病",
+                content: "糖尿病可分為第1型、第2型、其他型、妊娠型等。診斷標準：HBA1C≥6.5%、空腹血糖≥126 MG/DL、OGTT 2小時≥200 MG/DL、典型症狀+隨機血糖≥200 MG/DL。併合症：大血管病變、小血管病變、神經病變。"
+            },
+            {                title: "血糖控制",
+                content: "成人目標HBA1C<7%；65歲以上長者<7.5%；健康中等或差者<8.0～8.5%。盡早戒菸，每日檢查皮膚，發現厚繭、灰指甲、雞眼請就醫。"
+            },
+            {                title: "飲食管理",
+                content: "醣類選擇低升糖指數和高膳食纖維食物（全穀類、蔬菜、水果），平均分配於三餐。限制膽固醇和反式脂肪（肥肉、蛋黃、全脂奶製品、加工食物）。蛋白質每日4-6份，選用高生物價（蛋、瘦肉、魚），避免加工肉品。"
+            },
+            {                title: "運動",
+                content: "建議每週至少150分鐘中高強度有氧運動。每週至少三天，開始先進行10分鐘，目標為每天或每週大部分天數活動至少30分鐘。可建議：快走、慢跑、游泳、有氧舞蹈、球類運動。"
+            },
+            {                title: "藥物治療",
+                content: "1. 雙胍類(Loditon/伏糖)：減少肝臟葡萄糖、抑制小腸吸收、增加胰島素敏感性。副作用：腸胃不適、食慾降低、疲勞、金屬味、體重減、乳酸中毒。2. 磺醯尿素類(GLIBEN/固利康等)：刺激胰臟分泌胰島素。副作用：低血糖、體重增加。3. SGLT2抑制劑(FORXIGA/JARDIANCE)：抑制葡萄糖回收，透過尿液排出。副作用：泌尿道感染、利尿、脫水、低血壓、血脂異常、低血糖。4. DPP-4抑制劑(TRAJENTA/JANUVIA)：抑制DPP-4，促進胰島素分泌、抑制升糖素。副作用：腹痛、噁心、腹瀉、鼻咽炎、頭痛、關節痛。"
+            },
+            {                title: "日常照護",
+                content: "1. 每日檢查雙腳：37～40度熱水+中性肥皂清潔，勿用毛刷。2. 潤滑足部：清潔擦乾後塗不含酒精乳液，保持通風乾燥，避免凡士林。3. 指甲修剪：視力不佳請協助，趾甲邊緣剪平勿剪太短。4. 選擇襪子：吸汗淺色棉質襪，勿太緊或太鬆。5. 適腳鞋子：室內穿拖鞋，外出穿全包式低跟合腳鞋，購買宜在下午。6. 避免加熱產品：末梢感覺差易燙傷。7. 勿翹二郎腿：影響下肢血循引腰酸背痛。"
+            },
+            {                title: "Q/A",
+                content: "Q: 有哪些運動適合？ A: 快走、慢跑、游泳、有氧舞蹈及球類運動。Q: 每週運動多久？ A: 150分鐘。Q: 如何選擇襪子和鞋子？ A: 吸汗棉襪+合腳低跟全包式鞋子，預防足部受傷。Q: 糖尿病診斷標準？ A: HBA1C≥6.5%、空腹血糖≥126或血糖≥200 MG/DL(隨機)。"
+            },
+            {                title: "結語",
+                content: "感謝聆聽。認識糖尿病，從自我照護開始。"
+            }
+        ];
+
+        // 狀態管理
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        // 生成目錄指示器
+        const navIndicators = document.getElementById('navIndicators');
+        slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'dot' + (index === 0 ? ' active' : '');
+            dot.dataset.index = index;
+            dot.addEventListener('click', () => goToSlide(index));
+            navIndicators.appendChild(dot);
+        });
+
+        // 顯示投影片
+        function goToSlide(index) {
+            if (index < 0 || index >= totalSlides) return;
+            
+            currentSlide = index;
+            
+            // 更新所有投影片顯示
+            document.querySelectorAll('.slide').forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                }
+            });
+            
+            // 更新指示器
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.classList.remove('active');
+                if (i === index) dot.classList.add('active');
+            });
+        }
+
+        // 預設投影片已載入
+        document.addEventListener('DOMContentLoaded', () => {
+            // 確保第一個投影片顯示
+            goToSlide(0);
+        });
+
+        // 按鈕事件
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            goToSlide(currentSlide - 1);
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            goToSlide(currentSlide + 1);
+        });
+
+        document.getElementById('tocBtn').addEventListener('click', () => {
+            // 點擊目錄時跳轉到目錄投影片（slide 1）
+            goToSlide(1);
+        });
+    </script>
+</body>
+</html>
